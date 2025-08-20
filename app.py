@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 # Please customize the following variables 
-USER_NAME = "shahbazc"
+USER_NAME = "sami_naeem"
 VERSION = "1.0.0"
 
 def say_hi(msg:str = "Hi!", file_directory:str = "/app/data/") -> None:
