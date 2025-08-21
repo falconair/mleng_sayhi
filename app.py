@@ -1,9 +1,10 @@
+# Imports 
 import os
 from datetime import datetime
 
-# Please customize the following variables 
-USER_NAME = "shahbazc"
-VERSION = "1.0.0"
+#Please customize the following variables 
+USER_NAME = os.getenv("USER_NAME", "samimuha17")
+VERSION = os.getenv("VERSION", "1.0.0")
 
 def say_hi(msg:str = "Hi!", file_directory:str = "/app/data/") -> None:
     # Generate timestamp
@@ -11,8 +12,8 @@ def say_hi(msg:str = "Hi!", file_directory:str = "/app/data/") -> None:
 
     # Define filename with timestamp
     file_name = f"outputfile_{USER_NAME}_{VERSION}_timestamp_{timestamp}.txt"
-    file_path = os.join(file_directory, file_name)
-
+    file_path = os.path.join(file_directory, file_name)
+    
     # Write the timestamp inside the file
     with open(file_path, "w") as file:
         file.write(msg)

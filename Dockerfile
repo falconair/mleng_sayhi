@@ -7,4 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["fastapi", "run", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Where host directory will be mounted on the server
+VOLUME ["/app/data"]
+
+CMD ["python", "-u", "app.py"]
