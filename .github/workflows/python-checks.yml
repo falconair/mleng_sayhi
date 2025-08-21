@@ -2,18 +2,13 @@ name: Python Checks
 
 on:
   push:
-    branches:
-      - main
-      - prod
+    branches: [ main, prod ]
   pull_request:
-    branches:
-      - main
-      - prod
+    branches: [ main, prod ]
 
 jobs:
   checks:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -30,7 +25,7 @@ jobs:
 
     - name: Run pylint
       run: |
-        pylint tests/
+        pylint --disable=missing-module-docstring,missing-function-docstring,missing-class-docstring .
 
     - name: Run mypy
       run: |
@@ -38,4 +33,4 @@ jobs:
 
     - name: Run pytest
       run: |
-        pytest tests
+        pytest .
