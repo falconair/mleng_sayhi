@@ -18,22 +18,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            set -euo pipefail
-            IMAGE="${{ vars.DOCKER_USERNAME }}/mleng_sayhi:latest"
-            CONTAINER="mleng_sayhi"
-
-            # Ensure host output directory exists (assignment requirement)
-            sudo mkdir -p /opt/assignment_outputs
-            sudo chown $USER:$USER /opt/assignment_outputs
-
-            docker pull "$IMAGE"
-            docker rm -f "$CONTAINER" || true
-
-            # Run once: write file into /opt/assignment_outputs then exit
-            docker run --name "$CONTAINER" --rm \
-              -e USER_NAME="sami_naeem" \
-              -v /opt/assignment_outputs:/app/data \
-              "$IMAGE"
+            docker pull ${{ secrets.DOCKER_USERNAME }}/mleng_sayhi:latest
+            docker stop mleng_sayhi || true
+            docker rm mleng_sayhi || true
+            docker run -d --name mleng_sayhi -v /opt/assignment_outputs:/app/data ${{ secrets.DOCKER_USERNAME }}/mleng_sayhi:latest
 
 # The final block "logs on" to the remote server
 # - gets the latest docker image from the repository
