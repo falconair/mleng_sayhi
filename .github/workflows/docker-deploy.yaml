@@ -1,0 +1,33 @@
+name: Deploy Docker Image to Server
+on:
+  workflow_run:
+    # This GitHub Action depends on another, which package up docker and pushes it to a  docker repo
+    workflows: ["Build and Push Docker Image"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # If the docker build went ok and the image was pushed to the docker repo, then deploy it to the server
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Deploy to Linux server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker pull ${{ vars.DOCKER_USERNAME }}/mleng_sayhi:latest
+            docker stop ${{ vars.DOCKER_USERNAME }}/mleng_sayhi || true
+            docker rm ${{ vars.DOCKER_USERNAME }}/mleng_sayhi || true
+            docker run -d --name ${{ vars.DOCKER_USERNAME }}/mleng_sayhi -v /opt/assignment_outputs:/app/data ${{ vars.DOCKER_USERNAME }}/mleng_sayhi:latest
+
+# The final block "logs on" to the remote server
+# - gets the latest docker image from the repository
+# - stops the currently running container
+# - runs the newly downloaded image
+    # - notice that it runs it in '-d' or disconnected mode - so the container won't stop even if you log off
+    # - also notice that -v host_dir:container_dir connects the directory /opt/assignment_outputs on the internet server to your docker container, where it will shwo up as /app/data
+    #    - When you write to /app/data inside your docker image, it will actually be written to the shared directory

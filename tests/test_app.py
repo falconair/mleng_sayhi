@@ -1,26 +1,8 @@
 """
-This module contains tests for the FastAPI application.
+ Run the tests with: pytest tests/test_app.py
 """
+from ..app import add_numbers
 
-from fastapi.testclient import TestClient
-from ..app import app
-
-client = TestClient(app)
-
-def test_get_status():
-    """Test the /status endpoint."""
-    response = client.get("/status")
-    assert response.status_code == 200
-    assert response.json() == {"status": "OK"}
-
-def test_say_hi():
-    """Test the /sayhi/{name} endpoint."""
-    response = client.get("/sayhi/Alice")
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hi, Alice!"}
-
-def test_sum_numbers():
-    """Test the /sum endpoint."""
-    response = client.post("/sum", json={"a": 3, "b": 5})
-    assert response.status_code == 200
-    assert response.json() == {"sum": 8}
+def test_add_numbers():
+    """ Simple test to make sure numbers can be added correctly """
+    assert 3 == add_numbers(1,2)

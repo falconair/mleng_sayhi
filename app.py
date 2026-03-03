@@ -1,35 +1,27 @@
-"""
-This module contains the FastAPI application with endpoints for 
-status, greeting, and summing numbers
-"""
+import os 
+from datetime import datetime
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+# Please customize the following variables 
+USER_NAME = "shahbazc"
+VERSION = "1.0.0"
 
-app = FastAPI(
-    title="Simple FastAPI Server",
-    description="A FastAPI server with status and greeting endpoints.",
-    version="1.0.0"
-)
+def say_hi(msg:str = "Hi!", file_directory:str = "/app/data/") -> None:
+    # Generate timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M")
 
-@app.get("/status")
-def get_status() -> dict:
-    """Returns the server status."""
-    return {"status": "OK"}
+    # Define filename with timestamp
+    file_name = f"outputfile_{USER_NAME}_{VERSION}_timestamp_{timestamp}.txt"
+    #file_path = os.join(file_directory, file_name)
+    file_path = os.path.join(file_directory, file_name)
 
-@app.get("/sayhi/{name}")
-def say_hi(name: str) -> dict:
-    """Greets the user with their provided name."""
-    return {"message": f"Hi, {name}!"}
+    # Write the timestamp inside the file
+    with open(file_path, "w") as file:
+        file.write(msg)
 
-class SumRequest(BaseModel):
-    """Request model for summing two numbers."""
-    a: int
-    b: int
+    print(f"File '{file_path}' created successfully.")
 
-@app.post("/sum")
-def sum_numbers(data: SumRequest) -> dict:
-    """Returns the sum of two numbers using a POST request."""
-    return {"sum": data.a + data.b}
+def add_numbers(a:int, b:int) -> int:
+    return a + b
 
-# Run as `fastapi run app.py`
+if __name__ == "__main__":
+    say_hi()

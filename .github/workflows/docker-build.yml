@@ -40,9 +40,3 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
           sbom: true
-
-      # - name: Build Docker image
-      # run: |
-      #   TIMESTAMP=$(date +%Y%m%d%H%M%S)  # Timestamp versioning
-      #   docker build -t ${{ vars.DOCKER_USERNAME }}/sayhi_api:$TIMESTAMP .
-      #   docker build -t ${{ vars.DOCKER_USERNAME }}/sayhi_api:latest .
